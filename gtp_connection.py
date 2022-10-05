@@ -44,6 +44,7 @@ class GtpConnection:
         self._debug_mode: bool = debug_mode
         self.go_engine = go_engine
         self.board: GoBoard = board
+        self.time_limit = 1
         self.commands: Dict[str, Callable[[List[str]], None]] = {
             "protocol_version": self.protocol_version_cmd,
             "quit": self.quit_cmd,
@@ -60,7 +61,8 @@ class GtpConnection:
             "legal_moves": self.legal_moves_cmd,
             "gogui-rules_legal_moves": self.gogui_rules_legal_moves_cmd,
             "gogui-rules_final_result": self.gogui_rules_final_result_cmd,
-            "solve": self.solve_cmd
+            "solve": self.solve_cmd,
+            "timelimit" : self.set_time_limit
         }
 
         # argmap is used for argument checking
@@ -303,6 +305,9 @@ class GtpConnection:
     Assignment 2 - game-specific commands you have to implement or modify
     ==========================================================================
     """
+    def set_time_limit(self,seconds):
+        self.time_limit = seconds;
+        
     def gogui_rules_final_result_cmd(self, args):
         """ Implement this method correctly """
         legal_moves = GoBoardUtil.generate_legal_moves(self.board, self.board.current_player)

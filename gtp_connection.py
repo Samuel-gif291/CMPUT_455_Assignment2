@@ -373,7 +373,24 @@ class GtpConnection:
             
     def solve_cmd(self, args: List[str]) -> None:
         # remove this respond and implement this method
-        self.respond('Implement This for Assignment 2')
+        legal_moves = GoBoardUtil.generate_legal_moves(self.board, self.board.current_player)
+        color = 'b' if self.board.current_player == 1 else 'w'
+        opp_color = 'b' if opponent(self.board.current_player) == 1 else 'w'
+        if len(legal_moves) == 0:
+            self.respond(opp_color)
+            
+
+        wins = []
+        for m in legal_moves:
+            board_copy: GoBoard = self.board.copy()
+            self.board.play_move(m,self.board.current_player)
+            success = not self.solve_cmd([m,self.board.current_player])
+            
+            self.board = board_copy
+            if success:
+                wins.append(m)
+        
+        self.respond(color)
 
     """
     ==========================================================================
